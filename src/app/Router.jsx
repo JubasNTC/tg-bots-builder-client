@@ -7,9 +7,10 @@ import { DashboardPage } from '../pages/DashboardPage';
 
 import { ProtectedRoute } from './ProtectedRoute';
 import { RegistrationPage } from '../pages/RegistrationPage';
+import { BotsPage } from '../pages/BotsPage';
 
 const Router = () => {
-  const isAuthorized = !!useSelector(({ app: { account } }) => account);
+  const isAuthorized = !!useSelector(({ appReducer: { account } }) => account);
 
   return (
     <Routes>
@@ -23,6 +24,15 @@ const Router = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/bots"
+        element={
+          <ProtectedRoute isAuthorized={isAuthorized}>
+            <BotsPage />
+          </ProtectedRoute>
+        }
+      />
+
       {/* <Route path="/pokemon/:id" component={PokemonPage} /> */}
       {/* <Route component={NotFoundPage} /> */}
     </Routes>

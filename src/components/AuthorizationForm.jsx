@@ -15,11 +15,11 @@ const validationSchema = yup.object({
   email: yup
     .string('Введите свой email')
     .email('Введите действительный адрес электронной почты')
-    .required('Электронная почта обязательна'),
+    .required('Обязательное поле'),
   password: yup
     .string('Введите пароль')
     .min(12, 'Пароль должен состоять минимум из 12 символов')
-    .required('Требуется пароль'),
+    .required('Обязательное поле'),
 });
 
 const AuthorizationForm = ({ handleAuthorization }) => {

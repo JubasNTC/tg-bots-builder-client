@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { registerByAPI } from '../actions/app';
-import { Layout } from '../components/Layout';
 import { RegistrationForm } from '../components/RegistrationForm';
 
 const RegistrationPage = () => {
@@ -15,11 +14,7 @@ const RegistrationPage = () => {
     navigate('/dashboard');
   };
 
-  return (
-    <Layout>
-      <RegistrationForm handleRegistration={handleRegistration} />
-    </Layout>
-  );
+  return <RegistrationForm handleRegistration={handleRegistration} />;
 };
 
 export { RegistrationPage };

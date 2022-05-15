@@ -1,7 +1,13 @@
 import React from 'react';
 
+import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
+
 const DashboardPage = () => {
-  return <div>DashboardPage</div>;
+  return (
+    <LayoutWithSidebar>
+      <div>DashboardPage</div>
+    </LayoutWithSidebar>
+  );
 };
 
 export { DashboardPage };
