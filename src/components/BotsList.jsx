@@ -1,18 +1,34 @@
 import React from 'react';
 import { Button, Card, Dropdown, Icon } from 'semantic-ui-react';
 
-const BotsList = ({ botsList, onClickEditBot, onClickAnalytics }) => {
+import { dayjs } from '../utils/dayjs';
+
+const BotsList = ({
+  botsList,
+  onClickEditBot,
+  onDeleteEditBot,
+  onClickAnalytics,
+}) => {
   return (
     <Card.Group>
-      {botsList.map(({ id, name, description }) => (
-        <Card key={id} fluid raised>
+      {botsList.map(({ botId, name, description, updatedAt }) => (
+        <Card key={botId} fluid raised>
           <Card.Content>
             <Card.Header>{name}</Card.Header>
+            <Card.Meta>
+              <span className="date">{`Последние изменения ${dayjs(
+                updatedAt
+              ).format('DD-MM-YYYY HH:mm')}`}</span>
+            </Card.Meta>
             <Card.Description>{description}</Card.Description>
           </Card.Content>
           <Card.Content extra>
             <Button.Group floated="right">
-              <Button icon labelPosition="left" onClick={onClickEditBot}>
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => onClickEditBot(botId)}
+              >
                 Изменить
                 <Icon name="edit" />
               </Button>
@@ -22,7 +38,7 @@ const BotsList = ({ botsList, onClickEditBot, onClickAnalytics }) => {
                     <Icon name="chart bar" />
                     Аналитика
                   </Dropdown.Item>
-                  <Dropdown.Item>
+                  <Dropdown.Item onClick={() => onDeleteEditBot(botId)}>
                     <Icon name="delete" />
                     Удалить
                   </Dropdown.Item>

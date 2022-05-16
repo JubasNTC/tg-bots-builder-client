@@ -3,51 +3,55 @@ import { useFormik } from 'formik';
 import { Button, Divider, Form } from 'semantic-ui-react';
 import * as yup from 'yup';
 
-const validationSchema = yup.object({
-  name: yup
-    .string()
-    .max(30, 'Максимальная длина 30 символов')
-    .required('Обязательное поле'),
-  description: yup
-    .string()
-    .max(50, 'Максимальная длина 50 символов')
-    .default(''),
-  startText: yup
-    .string()
-    .max(300, 'Максимальная длина 300 символов')
-    .default(''),
-  helpText: yup
-    .string()
-    .max(300, 'Максимальная длина 300 символов')
-    .default(''),
-  settingsText: yup
-    .string()
-    .max(300, 'Максимальная длина 300 символов')
-    .default(''),
-  botUsername: yup
-    .string()
-    .min(5, 'Минимальная длина 5 символов')
-    .max(32, 'Максимальная длина 32 символов')
-    .required('Обязательное поле'),
-  botToken: yup
-    .string()
-    .length(46, 'Токен должен имеет длину в 46 символов')
-    .required('Обязательное поле'),
-});
+const validationSchema = yup
+  .object({
+    name: yup
+      .string()
+      .max(30, 'Максимальная длина 30 символов')
+      .required('Обязательное поле'),
+    description: yup
+      .string()
+      .max(50, 'Максимальная длина 50 символов')
+      .default(''),
+    startText: yup
+      .string()
+      .max(300, 'Максимальная длина 300 символов')
+      .default(''),
+    helpText: yup
+      .string()
+      .max(300, 'Максимальная длина 300 символов')
+      .default(''),
+    settingsText: yup
+      .string()
+      .max(300, 'Максимальная длина 300 символов')
+      .default(''),
+    botUsername: yup
+      .string()
+      .min(5, 'Минимальная длина 5 символов')
+      .max(32, 'Максимальная длина 32 символов')
+      .required('Обязательное поле'),
+    botToken: yup
+      .string()
+      .length(46, 'Токен должен имеет длину в 46 символов')
+      .required('Обязательное поле'),
+  })
+  .noUnknown(true);
 
-const BotForm = ({ onSubmit }) => {
+const BotForm = ({ botId, initialValues, onSubmit }) => {
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      description: '',
-      startText: '',
-      helpText: '',
-      settingsText: '',
-      botUsername: '',
-      botToken: '',
-    },
+    initialValues: initialValues
+      ? initialValues
+      : {
+          name: '',
+          description: '',
+          startText: '',
+          helpText: '',
+          settingsText: '',
+          botUsername: '',
+          botToken: '',
+        },
     validationSchema: validationSchema,
-    onSubmit: onSubmit,
+    onSubmit: botId ? (values) => onSubmit(values, botId) : onSubmit,
   });
 
   return (
@@ -122,6 +126,7 @@ const BotForm = ({ onSubmit }) => {
         fluid
         id="botToken"
         name="botToken"
+        type="password"
         icon="telegram"
         iconPosition="left"
         label="Токен бота в Telegram"

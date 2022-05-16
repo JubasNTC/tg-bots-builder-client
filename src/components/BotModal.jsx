@@ -5,6 +5,7 @@ import { BotForm } from './BotForm';
 const BotModal = ({
   headerText,
   headerIcon,
+  initialValues,
   onSubmitBotForm,
   isOpen,
   onOpen,
@@ -21,7 +22,7 @@ const BotModal = ({
     >
       <Header icon={headerIcon} content={headerText} />
       <Modal.Content>
-        <BotForm onSubmit={onSubmitBotForm} />
+        <BotForm initialValues={initialValues} onSubmit={onSubmitBotForm} />
       </Modal.Content>
     </Modal>
   );

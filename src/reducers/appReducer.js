@@ -1,9 +1,4 @@
-import {
-  APP_READY,
-  SET_ACCOUNT,
-  SET_ERROR_MESSAGE,
-  SET_LOADING,
-} from '../actions/app';
+import { APP_READY, SET_ACCOUNT, SET_LOADING } from '../actions/app';
 
 const initialState = {
   appReady: false,
@@ -24,12 +19,6 @@ const appReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isLoading: payload,
-      };
-
-    case SET_ERROR_MESSAGE:
-      return {
-        ...state,
-        errorMessage: payload,
       };
 
     case SET_ACCOUNT:
