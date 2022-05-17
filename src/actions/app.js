@@ -1,5 +1,3 @@
-import { toast } from 'react-toastify';
-
 import { axios } from '../app/axios';
 import { history } from '../app/history';
 import { notifyError, notifySuccess } from '../app/notifications';
@@ -12,6 +10,7 @@ export const SET_ACCOUNT = 'SET_ACCOUNT';
 // bots actions constants
 export const SET_BOTS = 'SET_BOTS';
 export const SET_BOT = 'SET_BOT';
+export const SET_BOTS_FOR_ATTACHMENT = 'SET_BOTS_FOR_ATTACHMENT';
 export const ADD_BOT = 'ADD_BOT';
 export const UPDATE_BOT = 'UPDATE_BOT';
 export const DELETE_BOT = 'DELETE_BOT';
@@ -40,6 +39,11 @@ export const setBots = (bots) => ({
 export const setBot = (bot) => ({
   type: SET_BOT,
   payload: bot,
+});
+
+export const setBotsForAttachment = (bots) => ({
+  type: SET_BOTS_FOR_ATTACHMENT,
+  payload: bots,
 });
 
 export const addBot = (bot) => ({
@@ -73,15 +77,7 @@ export const authorizeByAPI = async (dispatch, credentials) => {
     const errorMessage =
       e?.response?.data?.message || e?.message || 'Произошла ошибка';
 
-    toast.error(errorMessage, {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    notifyError(errorMessage);
 
     return Promise.reject();
   } finally {
@@ -104,15 +100,7 @@ export const registerByAPI = async (dispatch, credentials) => {
     const errorMessage =
       e?.response?.data?.message || e?.message || 'Произошла ошибка';
 
-    toast.error(errorMessage, {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    notifyError(errorMessage);
 
     return Promise.reject();
   } finally {
@@ -134,15 +122,7 @@ export const logoutByAPI = async (dispatch) => {
     const errorMessage =
       e?.response?.data?.message || e?.message || 'Произошла ошибка';
 
-    toast.error(errorMessage, {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    notifyError(errorMessage);
 
     return Promise.reject();
   } finally {
@@ -165,15 +145,7 @@ export const whoamiByAPI = () => async (dispatch) => {
     const errorMessage =
       e?.response?.data?.message || e?.message || 'Произошла ошибка';
 
-    toast.error(errorMessage, {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    notifyError(errorMessage);
   } finally {
     dispatch(setAppReady());
     dispatch(setLoading(false));
@@ -210,6 +182,25 @@ export const getUserBotByAPI = async (dispatch, botId) => {
     } = await axios.get(`/bots/${botId}`);
 
     dispatch(setBot(bot));
+  } catch (e) {
+    const errorMessage =
+      e?.response?.data?.message || e?.message || 'Произошла ошибка';
+
+    notifyError(errorMessage);
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const getUserBotsForAttachmentByAPI = async (dispatch) => {
+  dispatch(setLoading(true));
+
+  try {
+    const {
+      data: { bots },
+    } = await axios.get('/bots/attachment/list');
+
+    dispatch(setBotsForAttachment(bots));
   } catch (e) {
     const errorMessage =
       e?.response?.data?.message || e?.message || 'Произошла ошибка';

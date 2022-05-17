@@ -1,7 +1,14 @@
 import React from 'react';
 import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 
-const ConfirmDeleteBotModal = ({ onConfirm, isOpen, onOpen, onClose }) => {
+const ConfirmDeleteModal = ({
+  headerText,
+  contentText,
+  onConfirm,
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   return (
     <Modal
       closeIcon
@@ -11,9 +18,9 @@ const ConfirmDeleteBotModal = ({ onConfirm, isOpen, onOpen, onClose }) => {
       onClose={onClose}
       style={{ paddingBottom: '20px' }}
     >
-      <Header icon="delete" content="Удаление бота" />
+      <Header icon="delete" content={headerText} />
       <Modal.Content>
-        <p>Вы, действительно хотите удалить бота?</p>
+        <p>{contentText}</p>
       </Modal.Content>
       <Modal.Actions>
         <Button color="red" onClick={onClose}>
@@ -27,4 +34,4 @@ const ConfirmDeleteBotModal = ({ onConfirm, isOpen, onOpen, onClose }) => {
   );
 };
 
-export { ConfirmDeleteBotModal };
+export { ConfirmDeleteModal };

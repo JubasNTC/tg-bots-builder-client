@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 const LayoutWithSidebar = ({ children }) => {
   return (
     <Container style={{ paddingTop: '30px' }}>
-      <Menu pointing stackable fluid>
+      <Menu size="huge" pointing stackable fluid>
         <Menu.Item as={NavLink} to="/dashboard">
           <Icon name="home" />
           Главная

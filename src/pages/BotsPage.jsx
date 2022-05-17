@@ -6,7 +6,7 @@ import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
 import { CreationHeader } from '../components/CreationHeader';
 import { BotsList } from '../components/BotsList';
 import { BotModal } from '../components/BotModal';
-import { ConfirmDeleteBotModal } from '../components/ConfirmDeleteBotModal';
+import { ConfirmDeleteModal } from '../components/ConfirmDeleteModal';
 import {
   createBotByAPI,
   deleteBotByAPI,
@@ -121,7 +121,9 @@ const BotsPage = () => {
         onOpen={openEditBotModal}
         onClose={closeEditBotModal}
       />
-      <ConfirmDeleteBotModal
+      <ConfirmDeleteModal
+        headerText="Удаление бота"
+        contentText="Вы, действительно хотите удалить бота?"
         isOpen={isOpenConfirmDeleteBotModal}
         onConfirm={handleConfirmDeleteBot}
         onOpen={openConfirmDeleteBotModal}

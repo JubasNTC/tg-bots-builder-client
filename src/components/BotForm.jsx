@@ -37,7 +37,7 @@ const validationSchema = yup
   })
   .noUnknown(true);
 
-const BotForm = ({ botId, initialValues, onSubmit }) => {
+const BotForm = ({ initialValues, onSubmit }) => {
   const formik = useFormik({
     initialValues: initialValues
       ? initialValues
@@ -51,7 +51,7 @@ const BotForm = ({ botId, initialValues, onSubmit }) => {
           botToken: '',
         },
     validationSchema: validationSchema,
-    onSubmit: botId ? (values) => onSubmit(values, botId) : onSubmit,
+    onSubmit: onSubmit,
   });
 
   return (
@@ -82,8 +82,6 @@ const BotForm = ({ botId, initialValues, onSubmit }) => {
         fluid
         id="startText"
         name="startText"
-        icon="lock"
-        iconPosition="left"
         label="Текст на команду /start"
         value={formik.values.startText}
         onChange={formik.handleChange}
@@ -93,8 +91,6 @@ const BotForm = ({ botId, initialValues, onSubmit }) => {
         fluid
         id="helpText"
         name="helpText"
-        icon="lock"
-        iconPosition="left"
         label="Текст на команду /help"
         value={formik.values.helpText}
         onChange={formik.handleChange}
@@ -104,8 +100,6 @@ const BotForm = ({ botId, initialValues, onSubmit }) => {
         fluid
         id="settingsText"
         name="settingsText"
-        icon="lock"
-        iconPosition="left"
         label="Текст на команду /settings"
         value={formik.values.settingsText}
         onChange={formik.handleChange}

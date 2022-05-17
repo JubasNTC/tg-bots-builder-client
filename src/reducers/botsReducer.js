@@ -3,11 +3,13 @@ import {
   DELETE_BOT,
   SET_BOT,
   SET_BOTS,
+  SET_BOTS_FOR_ATTACHMENT,
   UPDATE_BOT,
 } from '../actions/app';
 
 const initialState = {
   bots: [],
+  botsForAttachment: [],
   selectedBot: null,
 };
 
@@ -23,6 +25,12 @@ const botsReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         selectedBot: payload,
+      };
+
+    case SET_BOTS_FOR_ATTACHMENT:
+      return {
+        ...state,
+        botsForAttachment: payload,
       };
 
     case ADD_BOT:

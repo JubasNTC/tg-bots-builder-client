@@ -8,6 +8,7 @@ import { DashboardPage } from '../pages/DashboardPage';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { BotsPage } from '../pages/BotsPage';
+import { FlowsPage } from '../pages/FlowsPage';
 
 const Router = () => {
   const isAuthorized = !!useSelector(({ appReducer: { account } }) => account);
@@ -29,6 +30,14 @@ const Router = () => {
         element={
           <ProtectedRoute isAuthorized={isAuthorized}>
             <BotsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/flows"
+        element={
+          <ProtectedRoute isAuthorized={isAuthorized}>
+            <FlowsPage />
           </ProtectedRoute>
         }
       />
