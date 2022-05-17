@@ -4,9 +4,10 @@ import { setLoading } from './app';
 
 export const SET_FLOWS = 'SET_FLOWS';
 export const SET_FLOW = 'SET_FLOW';
+export const SET_FLOW_ENABLED = 'SET_FLOW_ENABLED';
+export const SET_FLOW_TASKS = 'SET_FLOW_TASKS';
 export const ADD_FLOW = 'ADD_FLOW';
 export const UPDATE_FLOW = 'UPDATE_FLOW';
-export const SET_FLOW_ENABLED = 'SET_FLOW_ENABLED';
 export const DELETE_FLOW = 'DELETE_FLOW';
 
 export const setFlows = (flows) => ({
@@ -32,6 +33,11 @@ export const updateFlow = (flow) => ({
 export const setFlowEnabled = (flow) => ({
   type: SET_FLOW_ENABLED,
   payload: flow,
+});
+
+export const setFlowTasks = (tasks) => ({
+  type: SET_FLOW_TASKS,
+  payload: tasks,
 });
 
 export const deleteFlow = (flowId) => ({

@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Button, Card, Dropdown, Icon } from 'semantic-ui-react';
 
 import { dayjs } from '../utils/dayjs';
@@ -14,7 +15,9 @@ const FlowsList = ({
       {flowsList.map(({ flowId, name, description, enabled, updatedAt }) => (
         <Card key={flowId} fluid raised>
           <Card.Content>
-            <Card.Header>{name}</Card.Header>
+            <Card.Header as={NavLink} to={`/flows/${flowId}/constructor`}>
+              {name}
+            </Card.Header>
             <Card.Meta>
               <span className="date">{`Последние изменения ${dayjs(
                 updatedAt

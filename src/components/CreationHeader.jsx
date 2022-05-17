@@ -4,7 +4,7 @@ import { Button, Grid, Header, Icon } from 'semantic-ui-react';
 
 const CreationHeader = ({ headerText, onClickCreate }) => {
   return (
-    <Grid columns={2} style={{ paddingTop: '30px' }}>
+    <Grid columns={2}>
       <Grid.Row>
         <Grid.Column floated="left">
           <Header as="h1">{headerText}</Header>

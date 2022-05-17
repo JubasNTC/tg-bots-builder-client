@@ -26,7 +26,7 @@ const LayoutWithSidebar = ({ children }) => {
       </Menu>
       <Grid columns={1}>
         <Grid.Row>
-          <Grid.Column>{children}</Grid.Column>
+          <Grid.Column style={{ paddingTop: '30px' }}>{children}</Grid.Column>
         </Grid.Row>
       </Grid>
     </Container>
