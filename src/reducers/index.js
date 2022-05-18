@@ -1,9 +1,13 @@
 import { combineReducers } from 'redux';
 
 import { appReducer } from './appReducer';
+import { botsReducer } from './botsReducer';
+import { flowsReducer } from './flowsReducer';
 
 const rootReducer = combineReducers({
-  app: appReducer,
+  appReducer,
+  botsReducer,
+  flowsReducer,
 });
 
 export { rootReducer };

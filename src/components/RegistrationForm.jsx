@@ -1,11 +1,12 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import { NavLink } from 'react-router-dom';
 import {
   Button,
   Form,
   Grid,
   Header,
-  //Message,
+  Message,
   Segment,
 } from 'semantic-ui-react';
 import * as yup from 'yup';
@@ -92,10 +93,10 @@ const RegistrationForm = ({ handleRegistration }) => {
             </Button>
           </Segment>
         </Form>
-        {/*<Message style={{ textAlign: 'center' }}>*/}
-        {/*  У вас нет учетной записи?{' '}*/}
-        {/*  <NavLink to="/registration">Зарегистрируйтесь</NavLink>*/}
-        {/*</Message>*/}
+        <Message style={{ textAlign: 'center' }}>
+          У вас нет учетной записи?{' '}
+          <NavLink to="/registration">Зарегистрируйтесь</NavLink>
+        </Message>
       </Grid.Column>
     </Grid>
   );

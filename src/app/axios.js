@@ -12,7 +12,7 @@ const axios = axiosBase.create({
 });
 
 axios.interceptors.request.use((config) => {
-  config.headers.Authoriztion = `Bearer ${localStorage.getItem('token')}`;
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
 
   return config;
 });
@@ -37,10 +37,9 @@ axios.interceptors.response.use(
           }
         );
         localStorage.setItem('token', response.data.accessToken);
-
         return axios.request(originalRequest);
       } catch {
-        // ...
+        //
       }
     }
     throw error;
