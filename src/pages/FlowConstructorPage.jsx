@@ -1,86 +1,122 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Header } from 'semantic-ui-react';
-// import { useNavigate } from 'react-router-dom';
+import { Header, Modal } from 'semantic-ui-react';
 
 import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
-import { CreationHeader } from '../components/CreationHeader';
 import { FlowTasksList } from '../components/FlowTasksList';
-import { FlowModal } from '../components/FlowModal';
 
 import {
-  getUserFlowsByAPI,
-  createFlowByAPI,
-  getUserFlowForEditFormByAPI,
-  updateFlowByAPI,
-  deleteFlowByAPI,
-  setFlowEnabledByAPI,
+  createTaskFlowByAPI,
+  deleteTaskFlowByAPI,
+  updateTaskFlowByAPI,
+  getTasksFlowByAPI,
+  getTaskFlowByAPI,
 } from '../actions/flows';
-import { getUserBotsForAttachmentByAPI } from '../actions/app';
+
 import { ConfirmDeleteModal } from '../components/ConfirmDeleteModal';
 import { QuestionTaskForm } from '../components/QuestionTaskForm';
+import { MessageTaskForm } from '../components/MessageTaskForm';
+import { ImageTaskForm } from '../components/ImageTaskForm';
+import { VideoTaskForm } from '../components/VideoTaskForm';
+
+const headerMapping = {
+  message: '(Отправить сообщения)',
+  question: '(Задать вопрос)',
+  image: '(Отправить изображение)',
+  video: '(Отправить видео)',
+};
 
 const FlowConstructorPage = () => {
   const dispatch = useDispatch();
   const { flowId } = useParams();
 
-  // const navigate = useNavigate();
-
-  const [isOpenCreationFlowModal, setOpenOpenCreationFlowModal] =
+  const [isOpenCreationTaskFlowModal, setOpenOpenCreationTaskFlowModal] =
     React.useState(false);
-  const [isOpenEditFlowModal, setOpenEditFlowModal] = React.useState(false);
-  const [isOpenConfirmDeleteFlowModal, setOpenConfirmDeleteFlowModal] =
+  const [isOpenEditTaskFlowModal, setOpenTaskEditFlowModal] =
     React.useState(false);
-  const [flowIdForEdit, setFlowIdForEdit] = React.useState('');
-  const [flowIdForDelete, setFlowIdForDelete] = React.useState('');
+  const [isOpenFiltersTaskModal, setOpenFiltersTaskModal] =
+    React.useState(false);
+  const [isOpenConfirmDeleteTaskFlowModal, setOpenConfirmDeleteTaskFlowModal] =
+    React.useState(false);
+  const [selectedTaskType, setSelectedTaskType] = React.useState('');
+  const [prevTaskForCreation, setPrevTaskForCreation] = React.useState(null);
+  const [taskForEdit, setTaskForEdit] = React.useState(null);
+  const [taskForDelete, setTaskForDelete] = React.useState(null);
 
   React.useEffect(() => {
-    getUserFlowsByAPI(dispatch).catch(console.error);
-    getUserBotsForAttachmentByAPI(dispatch).catch(console.error);
-  }, [dispatch]);
+    getTasksFlowByAPI(dispatch, flowId).catch(console.error);
+  }, [dispatch, flowId]);
 
-  const openCreationFlowModal = () => setOpenOpenCreationFlowModal(true);
+  const openCreationTaskFlowModal = () =>
+    setOpenOpenCreationTaskFlowModal(true);
 
-  const closeCreationFlowModal = () => setOpenOpenCreationFlowModal(false);
+  const closeCreationTaskFlowModal = () =>
+    setOpenOpenCreationTaskFlowModal(false);
 
-  const openEditFlowModal = () => setOpenEditFlowModal(true);
+  const openTaskEditFlowModal = () => setOpenTaskEditFlowModal(true);
 
-  const closeEditFlowModal = () => setOpenEditFlowModal(false);
+  const closeTaskEditFlowModal = () => setOpenTaskEditFlowModal(false);
 
-  const openConfirmDeleteFlowModal = () => setOpenConfirmDeleteFlowModal(true);
+  const openFiltersTaskModal = () => setOpenFiltersTaskModal(true);
+
+  const closeFiltersTaskModal = () => setOpenFiltersTaskModal(false);
+
+  const openConfirmDeleteTaskFlowModal = () =>
+    setOpenConfirmDeleteTaskFlowModal(true);
 
   const closeConfirmDeleteFlowModal = () =>
-    setOpenConfirmDeleteFlowModal(false);
+    setOpenConfirmDeleteTaskFlowModal(false);
 
-  const handleClickEditFlow = async (flowId) => {
+  const handleClickEditTaskFlow = async (taskId, taskIndex, taskType) => {
     try {
-      setFlowIdForEdit(flowId);
-      await getUserFlowForEditFormByAPI(dispatch, flowId);
-      openEditFlowModal();
+      setTaskForEdit({ taskId, taskIndex });
+      setSelectedTaskType(taskType);
+      await getTaskFlowByAPI(dispatch, flowId, taskId);
+      openTaskEditFlowModal();
     } catch {
       // ...
     }
   };
 
-  const handleClickDeleteFlow = (flowId) => {
-    setFlowIdForDelete(flowId);
-    openConfirmDeleteFlowModal();
+  const handleClickDeleteTaskFlow = (taskId, taskIndex) => {
+    setTaskForDelete({ taskId, taskIndex });
+    openConfirmDeleteTaskFlowModal();
+  };
+
+  const handleClickAddTaskFlow = (taskId, taskIndex, taskType) => {
+    setSelectedTaskType(taskType);
+    setPrevTaskForCreation({ taskId, taskIndex });
+    openCreationTaskFlowModal();
   };
 
   const handleSubmitCreationFlowForm = async (values) => {
     try {
-      await createFlowByAPI(dispatch, values);
-      closeCreationFlowModal();
+      await createTaskFlowByAPI(
+        dispatch,
+        flowId,
+        prevTaskForCreation.taskId,
+        prevTaskForCreation.taskIndex,
+        selectedTaskType,
+        values
+      );
+      closeCreationTaskFlowModal();
     } catch {
       // ...
     }
   };
 
-  const handleSubmitEditFlowForm = async (values) => {
+  const handleSubmitEditTaskFlowForm = async (values) => {
     try {
-      await updateFlowByAPI(dispatch, flowIdForEdit, values);
-      closeEditFlowModal();
+      await updateTaskFlowByAPI(
+        dispatch,
+        flowId,
+        taskForEdit.taskId,
+        taskForEdit.taskIndex,
+        selectedTaskType,
+        values
+      );
+      closeTaskEditFlowModal();
     } catch {
       // ...
     }
@@ -88,7 +124,12 @@ const FlowConstructorPage = () => {
 
   const handleConfirmDeleteFlow = async () => {
     try {
-      await deleteFlowByAPI(dispatch, flowIdForDelete);
+      await deleteTaskFlowByAPI(
+        dispatch,
+        flowId,
+        taskForDelete.taskId,
+        taskForDelete.taskIndex
+      );
     } catch {
       // ...
     } finally {
@@ -96,68 +137,120 @@ const FlowConstructorPage = () => {
     }
   };
 
-  const handleClickFlowEnabled = async (flowId, enabled) => {
-    try {
-      await setFlowEnabledByAPI(dispatch, flowId, enabled);
-    } catch {
-      // ...
-    }
-  };
-
   const flowTasksList = useSelector(
     ({ flowsReducer: { flowTasks } }) => flowTasks
   );
 
-  const selectedFlow = useSelector(
-    ({ flowsReducer: { selectedFlow } }) => selectedFlow
-  );
-
-  const botsForAttachment = useSelector(
-    ({ botsReducer: { botsForAttachment } }) => botsForAttachment
+  const selectedTaskFlow = useSelector(
+    ({ flowsReducer: { selectedTaskFlow } }) => selectedTaskFlow
   );
 
   return (
     <LayoutWithSidebar>
-      {/*<CreationHeader*/}
-      {/*  headerText="Сценарии"*/}
-      {/*  onClickCreate={openCreationFlowModal}*/}
-      {/*/>*/}
       <Header as="h1">Шаги сценария</Header>
-      {/*<FlowTasksList*/}
-      {/*  flowTasksList={flowTasksList}*/}
-      {/*  onClickEditFlow={handleClickEditFlow}*/}
-      {/*  onDeleteEditFlow={handleClickDeleteFlow}*/}
-      {/*  onClickFlowEnabled={handleClickFlowEnabled}*/}
-      {/*/>*/}
-      <QuestionTaskForm />
-      {/*<FlowModal*/}
-      {/*  headerText="Создание сценария"*/}
-      {/*  headerIcon="file alternate outline"*/}
-      {/*  initialValues={null}*/}
-      {/*  botsForAttachment={botsForAttachment}*/}
-      {/*  onSubmitFlowForm={handleSubmitCreationFlowForm}*/}
-      {/*  isOpen={isOpenCreationFlowModal}*/}
-      {/*  onOpen={openCreationFlowModal}*/}
-      {/*  onClose={closeCreationFlowModal}*/}
-      {/*/>*/}
-      {/*<FlowModal*/}
-      {/*  headerText="Редактирование сценария"*/}
-      {/*  headerIcon="edit outline"*/}
-      {/*  initialValues={selectedFlow}*/}
-      {/*  botsForAttachment={botsForAttachment}*/}
-      {/*  onSubmitFlowForm={handleSubmitEditFlowForm}*/}
-      {/*  isOpen={isOpenEditFlowModal}*/}
-      {/*  onOpen={openEditFlowModal}*/}
-      {/*  onClose={closeEditFlowModal}*/}
-      {/*/>*/}
-      {/*<ConfirmDeleteModal*/}
-      {/*  headerText="Удаление сценария"*/}
-      {/*  contentText="Вы, действительно хотите удалить сценарий?"*/}
-      {/*  isOpen={isOpenConfirmDeleteFlowModal}*/}
-      {/*  onConfirm={handleConfirmDeleteFlow}*/}
-      {/*  onOpen={openConfirmDeleteFlowModal}*/}
-      {/*  onClose={closeConfirmDeleteFlowModal}*/}
-      {/*/>*/}
+      <FlowTasksList
+        flowTasksList={flowTasksList}
+        onClickAddTaskFlow={handleClickAddTaskFlow}
+        onClickEditTaskFlow={handleClickEditTaskFlow}
+        onDeleteEditTaskFlow={handleClickDeleteTaskFlow}
+      />
+      <Modal
+        closeIcon
+        dimmer="inverted"
+        open={isOpenCreationTaskFlowModal}
+        onOpen={openCreationTaskFlowModal}
+        onClose={closeCreationTaskFlowModal}
+        style={{ paddingBottom: '20px' }}
+      >
+        <Header
+          icon="file alternate outline"
+          content={`Создание шага сценария ${headerMapping[selectedTaskType]}`}
+        />
+        <Modal.Content>
+          {selectedTaskType === 'message' && (
+            <MessageTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'question' && (
+            <QuestionTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'image' && (
+            <ImageTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'video' && (
+            <VideoTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+        </Modal.Content>
+      </Modal>
+      <Modal
+        closeIcon
+        dimmer="inverted"
+        open={isOpenEditTaskFlowModal}
+        onOpen={openTaskEditFlowModal}
+        onClose={closeTaskEditFlowModal}
+        style={{ paddingBottom: '20px' }}
+      >
+        <Header
+          icon="edit"
+          content={`Изменение шага сценария ${headerMapping[selectedTaskType]}`}
+        />
+        <Modal.Content>
+          {selectedTaskType === 'message' && (
+            <MessageTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitEditTaskFlowForm}
+            />
+          )}
+          {selectedTaskType === 'question' && (
+            <QuestionTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitEditTaskFlowForm}
+            />
+          )}
+          {selectedTaskType === 'image' && (
+            <ImageTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitEditTaskFlowForm}
+            />
+          )}
+          {selectedTaskType === 'video' && (
+            <VideoTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitEditTaskFlowForm}
+            />
+          )}
+        </Modal.Content>
+      </Modal>
+      <Modal
+        closeIcon
+        dimmer="inverted"
+        open={isOpenFiltersTaskModal}
+        onOpen={openFiltersTaskModal}
+        onClose={closeFiltersTaskModal}
+        style={{ paddingBottom: '20px' }}
+      >
+        <Header icon="filter" content="Фильтры шага сценария" />
+        <Modal.Content>Фильтры</Modal.Content>
+      </Modal>
+      <ConfirmDeleteModal
+        headerText="Удаление шага сценария"
+        contentText="Вы, действительно хотите удалить шаг сценария?"
+        isOpen={isOpenConfirmDeleteTaskFlowModal}
+        onConfirm={handleConfirmDeleteFlow}
+        onOpen={openConfirmDeleteTaskFlowModal}
+        onClose={closeConfirmDeleteFlowModal}
+      />
     </LayoutWithSidebar>
   );
 };

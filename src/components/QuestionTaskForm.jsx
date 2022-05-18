@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Button, Divider, Form, Header, Icon } from 'semantic-ui-react';
-import { nanoid } from 'nanoid';
+import { Button, Divider, Form, Header } from 'semantic-ui-react';
 import mapValues from 'lodash/mapValues';
 import * as yup from 'yup';
 
@@ -12,6 +11,13 @@ const validationSchema = yup.lazy((obj) =>
         return yup
           .string()
           .max(30, 'Максимальная длина 30 символов')
+          .required('Обязательное поле');
+      }
+
+      if (key === 'type') {
+        return yup
+          .string()
+          .oneOf(['text', 'choice'], 'Неверный тип вопроса')
           .required('Обязательное поле');
       }
 
@@ -36,8 +42,114 @@ const validationSchema = yup.lazy((obj) =>
           : yup.number().default(0);
       }
 
-      if (key.startsWith('text_choice_') || key.startsWith('value_choice_')) {
-        return yup.string().required('Обязательное поле');
+      if (key === 'choiceAnswerText1') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue1
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerText2') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue2
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerText3') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue3
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerText4') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue4
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerText5') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue5
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerText6') {
+        return obj.type === 'choice' && !!obj.choiceAnswerValue6
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      //
+
+      if (key === 'choiceAnswerValue1') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText1
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerValue2') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText2
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerValue3') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText3
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerValue4') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText4
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerValue5') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText5
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
+      }
+
+      if (key === 'choiceAnswerValue6') {
+        return obj.type === 'choice' && !!obj.choiceAnswerText6
+          ? yup
+              .string()
+              .max(30, 'Максимальная длина 30 символов')
+              .required('Обязательное поле')
+          : yup.string().default('');
       }
     })
   )
@@ -105,32 +217,22 @@ const QuestionTaskForm = ({ initialValues, onSubmit }) => {
           validation: 'email',
           customValidationMessage: '',
           numberOfInvalidAnswers: 2,
+          choiceAnswerText1: '',
+          choiceAnswerText2: '',
+          choiceAnswerText3: '',
+          choiceAnswerText4: '',
+          choiceAnswerText5: '',
+          choiceAnswerText6: '',
+          choiceAnswerValue1: '',
+          choiceAnswerValue2: '',
+          choiceAnswerValue3: '',
+          choiceAnswerValue4: '',
+          choiceAnswerValue5: '',
+          choiceAnswerValue6: '',
         },
     validationSchema: validationSchema,
-    onSubmit: (values) => console.dir({ values }),
+    onSubmit: onSubmit,
   });
-
-  const [questionChoiceFields, setQuestionChoiceFields] = React.useState([]);
-
-  const handleAddChoiceField = () => {
-    const id = nanoid();
-    const textId = `text_choice_${id}`;
-    const valueId = `value_choice_${id}`;
-
-    formik.setFieldValue(textId, '');
-    formik.setFieldValue(valueId, '');
-
-    setQuestionChoiceFields([...questionChoiceFields, { textId, valueId }]);
-  };
-
-  const handleDeleteChoiceField = (_textId, _valueId) => {
-    formik.setFieldValue(_textId, undefined);
-    formik.setFieldValue(_valueId, undefined);
-
-    setQuestionChoiceFields(
-      questionChoiceFields.filter(({ valueId }) => valueId !== _valueId)
-    );
-  };
 
   return (
     <Form size="large" onSubmit={formik.handleSubmit}>
@@ -225,46 +327,200 @@ const QuestionTaskForm = ({ initialValues, onSubmit }) => {
           <Header as="h3" color="black">
             Варианты ответов
           </Header>
-          {questionChoiceFields.map(({ textId, valueId }) => (
-            <Form.Group widths="equal" key={`${textId}${valueId}`}>
-              <Form.Input
-                fluid
-                id={textId}
-                name={textId}
-                placeholder="Текст варианта ответа"
-                value={formik.values[textId]}
-                onChange={formik.handleChange}
-                error={formik.touched[textId] && formik.errors[textId]}
-              />
-              <Form.Input
-                fluid
-                id={valueId}
-                name={valueId}
-                placeholder="Зачение варианта ответа"
-                value={formik.values[valueId]}
-                onChange={formik.handleChange}
-                error={formik.touched[valueId] && formik.errors[valueId]}
-              />
-              <Form.Button
-                type="button"
-                icon
-                style={{ height: '42px' }}
-                onClick={() => handleDeleteChoiceField(textId, valueId)}
-              >
-                <Icon name="remove" />
-              </Form.Button>
-            </Form.Group>
-          ))}
-          <Button
-            type="button"
-            content="Добавить"
-            icon="plus"
-            labelPosition="left"
-            onClick={handleAddChoiceField}
-          />
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText1"
+              name="choiceAnswerText1"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText1}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText1 &&
+                formik.errors.choiceAnswerText1
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue1"
+              name="choiceAnswerValue1"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue1}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue1 &&
+                formik.errors.choiceAnswerValue1
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText2"
+              name="choiceAnswerText2"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText2}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText2 &&
+                formik.errors.choiceAnswerText2
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue2"
+              name="choiceAnswerValue2"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue2}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue2 &&
+                formik.errors.choiceAnswerValue2
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText3"
+              name="choiceAnswerText3"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText3}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText3 &&
+                formik.errors.choiceAnswerText3
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue3"
+              name="choiceAnswerValue3"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue3}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue3 &&
+                formik.errors.choiceAnswerValue3
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText4"
+              name="choiceAnswerText4"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText4}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText4 &&
+                formik.errors.choiceAnswerText4
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue4"
+              name="choiceAnswerValue4"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue4}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue4 &&
+                formik.errors.choiceAnswerValue4
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText5"
+              name="choiceAnswerText5"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText5}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText5 &&
+                formik.errors.choiceAnswerText5
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue5"
+              name="choiceAnswerValue5"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue5}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue5 &&
+                formik.errors.choiceAnswerValue5
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              id="choiceAnswerText6"
+              name="choiceAnswerText6"
+              icon="radio"
+              iconPosition="left"
+              label="Текст варианта ответа"
+              placeholder="Текст варианта ответа"
+              value={formik.values.choiceAnswerText6}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerText6 &&
+                formik.errors.choiceAnswerText6
+              }
+            />
+            <Form.Input
+              fluid
+              id="choiceAnswerValue6"
+              name="choiceAnswerValue6"
+              icon="cog"
+              iconPosition="left"
+              label="Значение варианта ответа"
+              placeholder="Значение варианта ответа"
+              value={formik.values.choiceAnswerValue6}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.choiceAnswerValue6 &&
+                formik.errors.choiceAnswerValue6
+              }
+            />
+          </Form.Group>
         </>
       )}
-
       <Divider />
       <Button floated="right" color="blue" size="large" type="submit">
         Сохранить
