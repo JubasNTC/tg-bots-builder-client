@@ -19,12 +19,18 @@ import { QuestionTaskForm } from '../components/QuestionTaskForm';
 import { MessageTaskForm } from '../components/MessageTaskForm';
 import { ImageTaskForm } from '../components/ImageTaskForm';
 import { VideoTaskForm } from '../components/VideoTaskForm';
+import { CardTaskForm } from '../components/CardTaskForm';
+import { NotificationTaskForm } from '../components/NotificationTaskForm';
+import { RequestTaskForm } from '../components/RequestTaskForm';
 
 const headerMapping = {
   message: '(Отправить сообщения)',
   question: '(Задать вопрос)',
   image: '(Отправить изображение)',
   video: '(Отправить видео)',
+  card: '(Отправить карточку)',
+  notifyTelegram: '(Отправить уведомление в Telegram чаты)',
+  http: '(Отправить HTTP запрос)',
 };
 
 const FlowConstructorPage = () => {
@@ -191,6 +197,24 @@ const FlowConstructorPage = () => {
               onSubmit={handleSubmitCreationFlowForm}
             />
           )}
+          {selectedTaskType === 'card' && (
+            <CardTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'notifyTelegram' && (
+            <NotificationTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'http' && (
+            <RequestTaskForm
+              initialValues={null}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
         </Modal.Content>
       </Modal>
       <Modal
@@ -228,6 +252,24 @@ const FlowConstructorPage = () => {
             <VideoTaskForm
               initialValues={selectedTaskFlow}
               onSubmit={handleSubmitEditTaskFlowForm}
+            />
+          )}
+          {selectedTaskType === 'card' && (
+            <CardTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'notifyTelegram' && (
+            <NotificationTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitCreationFlowForm}
+            />
+          )}
+          {selectedTaskType === 'http' && (
+            <RequestTaskForm
+              initialValues={selectedTaskFlow}
+              onSubmit={handleSubmitCreationFlowForm}
             />
           )}
         </Modal.Content>

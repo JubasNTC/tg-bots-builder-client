@@ -8,6 +8,9 @@ const iconsMapping = {
   question: 'question circle outline',
   image: 'images outline',
   video: 'file video outline',
+  card: 'address card outline',
+  notifyTelegram: 'telegram plane',
+  http: 'code',
 };
 
 const FlowTasksList = ({
@@ -117,6 +120,26 @@ const FlowTasksList = ({
                 >
                   <Icon name="file video outline" />
                   Видео
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => onClickAddTaskFlow(taskId, taskIndex, 'card')}
+                >
+                  <Icon name="address card outline" />
+                  Карточка
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() =>
+                    onClickAddTaskFlow(taskId, taskIndex, 'notifyTelegram')
+                  }
+                >
+                  <Icon name="telegram plane" />
+                  Уведомление в чаты
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => onClickAddTaskFlow(taskId, taskIndex, 'http')}
+                >
+                  <Icon name="code" />
+                  HTTP запрос
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

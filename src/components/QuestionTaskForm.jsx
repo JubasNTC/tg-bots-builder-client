@@ -96,8 +96,6 @@ const validationSchema = yup.lazy((obj) =>
           : yup.string().default('');
       }
 
-      //
-
       if (key === 'choiceAnswerValue1') {
         return obj.type === 'choice' && !!obj.choiceAnswerText1
           ? yup

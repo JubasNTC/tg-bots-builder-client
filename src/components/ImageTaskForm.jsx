@@ -9,7 +9,10 @@ const validationSchema = yup
       .string()
       .max(30, 'Максимальная длина 30 символов')
       .required('Обязательное поле'),
-    url: yup.string().url().required('Обязательное поле'),
+    url: yup
+      .string()
+      .url('Не верный формат URL-адреса')
+      .required('Обязательное поле'),
   })
   .noUnknown(true);
 

@@ -43,7 +43,7 @@ const FlowForm = ({ initialValues, botsForAttachment, onSubmit }) => {
         name="name"
         icon="user"
         iconPosition="left"
-        label="Название сценария"
+        label="Название сценария в системе"
         value={formik.values.name}
         onChange={formik.handleChange}
         error={formik.touched.name && formik.errors.name}
