@@ -12,6 +12,8 @@ import {
   updateTaskFlowByAPI,
   getTasksFlowByAPI,
   getTaskFlowByAPI,
+  getTaskFlowFiltersByAPI,
+  changeTaskFlowFiltersByAPI,
 } from '../actions/flows';
 
 import { ConfirmDeleteModal } from '../components/ConfirmDeleteModal';
@@ -22,6 +24,7 @@ import { VideoTaskForm } from '../components/VideoTaskForm';
 import { CardTaskForm } from '../components/CardTaskForm';
 import { NotificationTaskForm } from '../components/NotificationTaskForm';
 import { RequestTaskForm } from '../components/RequestTaskForm';
+import FiltersForm from '../components/FiltersForm';
 
 const headerMapping = {
   message: '(Отправить сообщения)',
@@ -46,6 +49,7 @@ const FlowConstructorPage = () => {
   const [isOpenConfirmDeleteTaskFlowModal, setOpenConfirmDeleteTaskFlowModal] =
     React.useState(false);
   const [selectedTaskType, setSelectedTaskType] = React.useState('');
+  const [selectedTaskFilters, setSelectedFilters] = React.useState('');
   const [prevTaskForCreation, setPrevTaskForCreation] = React.useState(null);
   const [taskForEdit, setTaskForEdit] = React.useState(null);
   const [taskForDelete, setTaskForDelete] = React.useState(null);
@@ -128,6 +132,21 @@ const FlowConstructorPage = () => {
     }
   };
 
+  const handleSubmitTaskFlowFiltersForm = async (values) => {
+    console.log(JSON.stringify(values));
+    try {
+      await changeTaskFlowFiltersByAPI(
+        dispatch,
+        flowId,
+        selectedTaskFilters,
+        values
+      );
+      closeFiltersTaskModal();
+    } catch {
+      // ...
+    }
+  };
+
   const handleConfirmDeleteFlow = async () => {
     try {
       await deleteTaskFlowByAPI(
@@ -140,6 +159,17 @@ const FlowConstructorPage = () => {
       // ...
     } finally {
       closeConfirmDeleteFlowModal();
+    }
+  };
+
+  const handleClickTaskFlowFilters = async (taskId) => {
+    try {
+      setSelectedFilters(taskId);
+      openFiltersTaskModal();
+      await getTaskFlowFiltersByAPI(dispatch, flowId, taskId);
+    } catch {
+      // ...
+    } finally {
     }
   };
 
@@ -159,6 +189,7 @@ const FlowConstructorPage = () => {
         onClickAddTaskFlow={handleClickAddTaskFlow}
         onClickEditTaskFlow={handleClickEditTaskFlow}
         onDeleteEditTaskFlow={handleClickDeleteTaskFlow}
+        onClickFiltersTaskFlow={handleClickTaskFlowFilters}
       />
       <Modal
         closeIcon
@@ -257,19 +288,19 @@ const FlowConstructorPage = () => {
           {selectedTaskType === 'card' && (
             <CardTaskForm
               initialValues={selectedTaskFlow}
-              onSubmit={handleSubmitCreationFlowForm}
+              onSubmit={handleSubmitEditTaskFlowForm}
             />
           )}
           {selectedTaskType === 'notifyTelegram' && (
             <NotificationTaskForm
               initialValues={selectedTaskFlow}
-              onSubmit={handleSubmitCreationFlowForm}
+              onSubmit={handleSubmitEditTaskFlowForm}
             />
           )}
           {selectedTaskType === 'http' && (
             <RequestTaskForm
               initialValues={selectedTaskFlow}
-              onSubmit={handleSubmitCreationFlowForm}
+              onSubmit={handleSubmitEditTaskFlowForm}
             />
           )}
         </Modal.Content>
@@ -282,8 +313,10 @@ const FlowConstructorPage = () => {
         onClose={closeFiltersTaskModal}
         style={{ paddingBottom: '20px' }}
       >
-        <Header icon="filter" content="Фильтры шага сценария" />
-        <Modal.Content>Фильтры</Modal.Content>
+        <Header icon="filter" content="Фильтры" />
+        <Modal.Content>
+          <FiltersForm onSubmit={handleSubmitTaskFlowFiltersForm} />
+        </Modal.Content>
       </Modal>
       <ConfirmDeleteModal
         headerText="Удаление шага сценария"

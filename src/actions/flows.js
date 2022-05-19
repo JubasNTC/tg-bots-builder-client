@@ -13,6 +13,7 @@ export const ADD_TASK_FLOW = 'ADD_TASK_FLOW';
 export const UPDATE_TASK_FLOW = 'UPDATE_TASK_FLOW';
 export const DELETE_TASK_FLOW = 'DELETE_TASK_FLOW';
 export const SET_TASK_FLOW = 'SET_TASK_FLOW';
+export const SET_TASK_FLOW_FILTERS = 'SET_TASK_FLOW_FILTERS';
 
 export const setFlows = (flows) => ({
   type: SET_FLOWS,
@@ -67,6 +68,11 @@ export const deleteFlowTask = (task) => ({
 export const setFlowTask = (task) => ({
   type: SET_TASK_FLOW,
   payload: task,
+});
+
+export const setFlowTaskFilters = (filters) => ({
+  type: SET_TASK_FLOW_FILTERS,
+  payload: filters,
 });
 
 export const getUserFlowsByAPI = async (dispatch) => {
@@ -325,6 +331,50 @@ export const deleteTaskFlowByAPI = async (
 
     dispatch(deleteFlowTask({ taskId, taskIndex }));
     notifySuccess('Шаг сценария успешно удален!');
+    return Promise.resolve();
+  } catch (e) {
+    const errorMessage =
+      e?.response?.data?.message || e?.message || 'Произошла ошибка';
+
+    notifyError(errorMessage);
+
+    return Promise.reject();
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const getTaskFlowFiltersByAPI = async (dispatch, flowId, taskId) => {
+  dispatch(setLoading(true));
+
+  try {
+    const {
+      data: { filters },
+    } = await axios.get(`/flows/${flowId}/tasks/${taskId}/filters`);
+
+    dispatch(setFlowTaskFilters(filters));
+  } catch (e) {
+    const errorMessage =
+      e?.response?.data?.message || e?.message || 'Произошла ошибка';
+
+    notifyError(errorMessage);
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const changeTaskFlowFiltersByAPI = async (
+  dispatch,
+  flowId,
+  taskId,
+  filters
+) => {
+  dispatch(setLoading(true));
+
+  try {
+    await axios.post(`/flows/${flowId}/tasks/${taskId}/filters`, { filters });
+
+    notifySuccess('Фильтры обновлены!');
     return Promise.resolve();
   } catch (e) {
     const errorMessage =

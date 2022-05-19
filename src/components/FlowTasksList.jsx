@@ -18,6 +18,7 @@ const FlowTasksList = ({
   onClickAddTaskFlow,
   onClickEditTaskFlow,
   onDeleteEditTaskFlow,
+  onClickFiltersTaskFlow,
 }) => {
   return (
     <Card.Group>
@@ -74,7 +75,7 @@ const FlowTasksList = ({
                     icon
                     labelPosition="left"
                     style={{ marginBottom: '10px' }}
-                    //onClick={() => onDeleteEditTaskFlow(taskId, taskIndex)}
+                    onClick={() => onClickFiltersTaskFlow(taskId)}
                   >
                     Фильтры
                     <Icon name="filter" />

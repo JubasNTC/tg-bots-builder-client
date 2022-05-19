@@ -10,6 +10,7 @@ import {
   UPDATE_TASK_FLOW,
   DELETE_TASK_FLOW,
   SET_TASK_FLOW,
+  SET_TASK_FLOW_FILTERS,
 } from '../actions/flows';
 
 const initialState = {
@@ -43,6 +44,7 @@ const initialState = {
     // },
   ],
   selectedTaskFlow: null,
+  selectedTaskFlowFilters: null,
 };
 
 const flowsReducer = (state = initialState, { type, payload }) => {
@@ -136,6 +138,12 @@ const flowsReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         flowTasks: Array.from(state.flowTasks),
+      };
+
+    case SET_TASK_FLOW_FILTERS:
+      return {
+        ...state,
+        selectedTaskFlowFilters: payload,
       };
 
     default:

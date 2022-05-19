@@ -298,6 +298,7 @@ const RequestTaskForm = ({ initialValues, onSubmit }) => {
           id="isUseProxy"
           name="isUseProxy"
           label="Использовать прокси-сервер"
+          checked={formik.values.isUseProxy}
           value={formik.values.isUseProxy}
           onChange={formik.handleChange}
           error={formik.touched.isUseProxy && formik.errors.isUseProxy}

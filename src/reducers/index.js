@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 import { appReducer } from './appReducer';
 import { botsReducer } from './botsReducer';
@@ -8,6 +9,7 @@ const rootReducer = combineReducers({
   appReducer,
   botsReducer,
   flowsReducer,
+  form: formReducer,
 });
 
 export { rootReducer };
