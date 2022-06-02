@@ -2,22 +2,40 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
+import { ProtectedRoute } from './ProtectedRoute';
+import { AuthedRoute } from './AuthedRoute';
+
 import { AuthorizationPage } from '../pages/AuthorizationPage';
 import { DashboardPage } from '../pages/DashboardPage';
-
-import { ProtectedRoute } from './ProtectedRoute';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { BotsPage } from '../pages/BotsPage';
 import { FlowsPage } from '../pages/FlowsPage';
 import { FlowConstructorPage } from '../pages/FlowConstructorPage';
+import { AnalyticsPage } from '../pages/AnalyticsPage';
 
 const Router = () => {
   const isAuthorized = !!useSelector(({ appReducer: { account } }) => account);
 
   return (
     <Routes>
-      <Route path="/" exact element={<AuthorizationPage />} />
-      <Route path="/registration" exact element={<RegistrationPage />} />
+      <Route
+        path="/"
+        element={
+          <AuthedRoute isAuthorized={isAuthorized}>
+            <AuthorizationPage />
+          </AuthedRoute>
+        }
+      />
+      <Route
+        path="/registration"
+        element={
+          <AuthedRoute isAuthorized={isAuthorized}>
+            <RegistrationPage />
+          </AuthedRoute>
+        }
+      />
+      {/*<Route path="/" exact element={<AuthorizationPage />} />*/}
+      {/*<Route path="/registration" exact element={<RegistrationPage />} />*/}
       <Route
         path="/dashboard"
         element={
@@ -47,6 +65,14 @@ const Router = () => {
         element={
           <ProtectedRoute isAuthorized={isAuthorized}>
             <FlowConstructorPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute isAuthorized={isAuthorized}>
+            <AnalyticsPage />
           </ProtectedRoute>
         }
       />

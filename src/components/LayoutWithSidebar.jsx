@@ -1,9 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Container, Grid, Icon, Menu } from 'semantic-ui-react';
 
 import { NavLink } from 'react-router-dom';
+import { logoutByAPI } from '../actions/app';
 
 const LayoutWithSidebar = ({ children }) => {
+  const dispatch = useDispatch();
+
+  // const email = useSelector(({ appReducer: { account } }) => account.email);
+
   return (
     <Container style={{ paddingTop: '30px' }}>
       <Menu size="huge" pointing stackable fluid>
@@ -22,6 +28,10 @@ const LayoutWithSidebar = ({ children }) => {
         <Menu.Item as={NavLink} to="/analytics">
           <Icon name="chart bar" />
           Аналитика
+        </Menu.Item>
+        <Menu.Item position="right" onClick={() => logoutByAPI(dispatch)}>
+          <Icon name="window close" />
+          Выйти
         </Menu.Item>
       </Menu>
       <Grid columns={1}>

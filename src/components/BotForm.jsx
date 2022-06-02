@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Button, Divider, Form } from 'semantic-ui-react';
+import { Button, Divider, Form, Message } from 'semantic-ui-react';
 import * as yup from 'yup';
 
 const validationSchema = yup
@@ -128,6 +128,23 @@ const BotForm = ({ initialValues, onSubmit }) => {
         onChange={formik.handleChange}
         error={formik.touched.botToken && formik.errors.botToken}
       />
+      <Message>
+        <Message.Header>Для получения токена, необходимо:</Message.Header>
+        <Message.List>
+          <Message.Item>
+            Перейти по следующей ссылке{' '}
+            <a href="https://t.me/BotFather" target="_blank" rel="noreferrer">
+              @BotFather
+            </a>
+          </Message.Item>
+          <Message.Item>
+            Откроется приложение Telegram и необходимо отправить в чат команду{' '}
+            <b>/newbot</b>
+          </Message.Item>
+          <Message.Item>Далее следовать инструкциям</Message.Item>
+          <Message.Item>Скопировать полученный токен и вставить</Message.Item>
+        </Message.List>
+      </Message>
       <Divider />
       <Button floated="right" color="blue" size="large" type="submit">
         Сохранить

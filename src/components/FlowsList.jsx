@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Button, Card, Dropdown, Icon } from 'semantic-ui-react';
 
 import { dayjs } from '../utils/dayjs';
+import { EmptyContent } from './EmptyContent';
 
 const FlowsList = ({
   flowsList,
@@ -10,7 +11,9 @@ const FlowsList = ({
   onDeleteEditFlow,
   onClickFlowEnabled,
 }) => {
-  return (
+  return flowsList.length === 0 ? (
+    <EmptyContent text="У вас нет созданный сценариев" />
+  ) : (
     <Card.Group>
       {flowsList.map(({ flowId, name, description, enabled, updatedAt }) => (
         <Card key={flowId} fluid raised>

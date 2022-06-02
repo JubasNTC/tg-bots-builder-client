@@ -116,6 +116,7 @@ export const logoutByAPI = async (dispatch) => {
     localStorage.removeItem('token');
 
     dispatch(setAccount(null));
+    history.push('/');
 
     return Promise.resolve();
   } catch (e) {

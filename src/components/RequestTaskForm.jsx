@@ -17,6 +17,13 @@ const validationSchema = yup.lazy((obj) =>
             .required('Обязательное поле');
         }
 
+        if (key === 'url') {
+          return yup
+            .string()
+            .url('Невалидный URL-адрес запроса')
+            .required('Обязательное поле');
+        }
+
         if (key === 'method') {
           return yup
             .string()
@@ -101,6 +108,7 @@ const RequestTaskForm = ({ initialValues, onSubmit }) => {
       ? initialValues
       : {
           name: '',
+          url: '',
           method: 'get',
           httpHeaders: {
             'Content-Type': 'application/json',
@@ -129,6 +137,18 @@ const RequestTaskForm = ({ initialValues, onSubmit }) => {
         value={formik.values.name}
         onChange={formik.handleChange}
         error={formik.touched.name && formik.errors.name}
+      />
+      <Form.Input
+        fluid
+        id="url"
+        name="url"
+        icon="linkify"
+        iconPosition="left"
+        label="URL-адрес запроса"
+        placeholder="URL-адрес запроса"
+        value={formik.values.url}
+        onChange={formik.handleChange}
+        error={formik.touched.url && formik.errors.url}
       />
       <Form.Dropdown
         fluid

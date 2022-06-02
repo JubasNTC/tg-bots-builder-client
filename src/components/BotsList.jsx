@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Dropdown, Icon } from 'semantic-ui-react';
 
 import { dayjs } from '../utils/dayjs';
+import { EmptyContent } from './EmptyContent';
 
 const BotsList = ({
   botsList,
@@ -9,7 +10,9 @@ const BotsList = ({
   onDeleteEditBot,
   onClickAnalytics,
 }) => {
-  return (
+  return botsList.length === 0 ? (
+    <EmptyContent text="У вас нет созданный ботов" />
+  ) : (
     <Card.Group>
       {botsList.map(({ botId, name, description, updatedAt }) => (
         <Card key={botId} fluid raised>
